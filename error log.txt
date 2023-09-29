@@ -1,0 +1,99 @@
+InvalidHeader: Invalid leading whitespace, reserved character(s), or returncharacter(s) in header value: "{'model_name': 'credit-classifier', 'dataset':        customer_id  person_age  person_income person_home_ownership  \\\n0                1          22          59000                  RENT   \n1                2          21           9600                   OWN   \n2                3          25           9600              MORTGAGE   \n3                4          23          65500                  RENT   \n4                5          24          54400                  RENT   \n...            ...         ...            ...                   ...   \n32576        32577          57          53000              MORTGAGE   \n32577        32578          54         120000              MORTGAGE   \n32578        32579          65          76000                  RENT   \n32579        32580          56         150000              MORTGAGE   \n32580        32581          66          42000                  RENT   \n\n       person_emp_length      loan_intent loan_grade  loan_amnt  \\\n0                  123.0         PERSONAL          D      35000   \n1                    5.0        EDUCATION          B       1000   \n2                    1.0          MEDICAL          C       5500   \n3                    4.0          MEDICAL          C      35000   \n4                    8.0          MEDICAL          C      35000   \n...                  ...              ...        ...        ...   \n32576                1.0         PERSONAL          C       5800   \n32577                4.0         PERSONAL          A      17625   \n32578                3.0  HOMEIMPROVEMENT          B      35000   \n32579                5.0         PERSONAL          B      15000   \n32580                2.0          MEDICAL          B       6475   \n\n       loan_int_rate  loan_status  loan_percent_income  \\\n0              16.02            1                 0.59   \n1              11.14            0                 0.10   \n2              12.87            1                 0.57   \n3              15.23            1                 0.53   \n4              14.27            1                 0.55   \n...              ...          ...                  ...   \n32576          13.16            0                 0.11   \n32577           7.49            0                 0.15   \n32578          10.99            1                 0.46   \n32579          11.48            0                 0.10   \n32580           9.99            0                 0.15   \n\n      cb_person_default_on_file  cb_person_cred_hist_length  \n0                             Y                           3  \n1                             N                           2  \n2                             N                           3  \n3                             N                           2  \n4                             Y                           4  \n...                         ...                         ...  \n32576                         N                          30  \n32577                         N                          19  \n32578                         N                          28  \n32579                         N                          26  \n32580                         N                          30  \n\n[32581 rows x 13 columns]}"
+
+The above exception was the direct cause of the following exception:
+
+MLRunRuntimeError                         Traceback (most recent call last)
+File /opt/conda/lib/python3.9/site-packages/mlrun/db/httpdb.py:1419, in HTTPRunDB.submit_pipeline(self, project, pipeline, arguments, experiment, run, namespace, artifact_path, ops, ttl, cleanup_ttl)
+   1418     params = {"namespace": namespace, "experiment": experiment, "run": run}
+-> 1419     resp = self.api_call(
+   1420         "POST",
+   1421         f"projects/{project}/pipelines",
+   1422         params=params,
+   1423         timeout=20,
+   1424         body=data,
+   1425         headers=headers,
+   1426     )
+   1427 except OSError as err:
+
+File /opt/conda/lib/python3.9/site-packages/mlrun/db/httpdb.py:232, in HTTPRunDB.api_call(self, method, path, error, params, body, json, headers, timeout, version)
+    231     error = f"{err_to_str(exc)}: {error}" if error else err_to_str(exc)
+--> 232     raise mlrun.errors.MLRunRuntimeError(error) from exc
+    234 if not response.ok:
+
+MLRunRuntimeError: Invalid leading whitespace, reserved character(s), or returncharacter(s) in header value: "{'model_name': 'credit-classifier', 'dataset':        customer_id  person_age  person_income person_home_ownership  \\\n0                1          22          59000                  RENT   \n1                2          21           9600                   OWN   \n2                3          25           9600              MORTGAGE   \n3                4          23          65500                  RENT   \n4                5          24          54400                  RENT   \n...            ...         ...            ...                   ...   \n32576        32577          57          53000              MORTGAGE   \n32577        32578          54         120000              MORTGAGE   \n32578        32579          65          76000                  RENT   \n32579        32580          56         150000              MORTGAGE   \n32580        32581          66          42000                  RENT   \n\n       person_emp_length      loan_intent loan_grade  loan_amnt  \\\n0                  123.0         PERSONAL          D      35000   \n1                    5.0        EDUCATION          B       1000   \n2                    1.0          MEDICAL          C       5500   \n3                    4.0          MEDICAL          C      35000   \n4                    8.0          MEDICAL          C      35000   \n...                  ...              ...        ...        ...   \n32576                1.0         PERSONAL          C       5800   \n32577                4.0         PERSONAL          A      17625   \n32578                3.0  HOMEIMPROVEMENT          B      35000   \n32579                5.0         PERSONAL          B      15000   \n32580                2.0          MEDICAL          B       6475   \n\n       loan_int_rate  loan_status  loan_percent_income  \\\n0              16.02            1                 0.59   \n1              11.14            0                 0.10   \n2              12.87            1                 0.57   \n3              15.23            1                 0.53   \n4              14.27            1                 0.55   \n...              ...          ...                  ...   \n32576          13.16            0                 0.11   \n32577           7.49            0                 0.15   \n32578          10.99            1                 0.46   \n32579          11.48            0                 0.10   \n32580           9.99            0                 0.15   \n\n      cb_person_default_on_file  cb_person_cred_hist_length  \n0                             Y                           3  \n1                             N                           2  \n2                             N                           3  \n3                             N                           2  \n4                             Y                           4  \n...                         ...                         ...  \n32576                         N                          30  \n32577                         N                          19  \n32578                         N                          28  \n32579                         N                          26  \n32580                         N                          30  \n\n[32581 rows x 13 columns]}"
+
+During handling of the above exception, another exception occurred:
+
+OSError                                   Traceback (most recent call last)
+Cell In [24], line 2
+      1 # Run the workflow
+----> 2 run_id = project.run(
+      3     workflow_path="./workflow-oracle.py",
+      4     arguments={"model_name": "credit-classifier","dataset": df},
+      5     watch=True,
+      6 )
+
+File /opt/conda/lib/python3.9/site-packages/mlrun/projects/project.py:2327, in MlrunProject.run(self, name, workflow_path, arguments, artifact_path, workflow_handler, namespace, sync, watch, dirty, ttl, engine, local, schedule, timeout, overwrite, source, cleanup_ttl)
+   2324     inner_engine = get_workflow_engine(workflow_spec.engine, local).engine
+   2325 workflow_spec.engine = inner_engine or workflow_engine.engine
+-> 2327 run = workflow_engine.run(
+   2328     self,
+   2329     workflow_spec,
+   2330     name,
+   2331     workflow_handler=workflow_handler,
+   2332     secrets=self._secrets,
+   2333     artifact_path=artifact_path,
+   2334     namespace=namespace,
+   2335     source=source,
+   2336 )
+   2337 # run is None when scheduling
+   2338 if run and run.state == mlrun.run.RunStatuses.failed:
+
+File /opt/conda/lib/python3.9/site-packages/mlrun/projects/pipelines.py:586, in _KFPRunner.run(cls, project, workflow_spec, name, workflow_handler, secrets, artifact_path, namespace, source)
+    583     project.set_source(source=source)
+    585 namespace = namespace or config.namespace
+--> 586 id = _run_pipeline(
+    587     workflow_handler,
+    588     project=project.metadata.name,
+    589     arguments=workflow_spec.args,
+    590     experiment=name or workflow_spec.name,
+    591     namespace=namespace,
+    592     artifact_path=artifact_path,
+    593     cleanup_ttl=workflow_spec.cleanup_ttl or workflow_spec.ttl,
+    594 )
+    595 project.notifiers.push_pipeline_start_message(
+    596     project.metadata.name,
+    597     project.get_param("commit_id", None),
+    598     id,
+    599     True,
+    600 )
+    601 pipeline_context.clear()
+
+File /opt/conda/lib/python3.9/site-packages/mlrun/run.py:1103, in _run_pipeline(pipeline, arguments, project, experiment, run, namespace, artifact_path, ops, url, cleanup_ttl)
+   1097 if mldb.kind != "http":
+   1098     raise ValueError(
+   1099         "run pipeline require access to remote api-service"
+   1100         ", please set the dbpath url"
+   1101     )
+-> 1103 pipeline_run_id = mldb.submit_pipeline(
+   1104     project,
+   1105     pipeline,
+   1106     arguments,
+   1107     experiment=experiment,
+   1108     run=run,
+   1109     namespace=namespace,
+   1110     ops=ops,
+   1111     artifact_path=artifact_path,
+   1112     cleanup_ttl=cleanup_ttl,
+   1113 )
+   1114 logger.info(f"Pipeline run id={pipeline_run_id}, check UI for progress")
+   1115 return pipeline_run_id
+
+File /opt/conda/lib/python3.9/site-packages/mlrun/db/httpdb.py:1429, in HTTPRunDB.submit_pipeline(self, project, pipeline, arguments, experiment, run, namespace, artifact_path, ops, ttl, cleanup_ttl)
+   1427 except OSError as err:
+   1428     logger.error(f"error cannot submit pipeline: {err_to_str(err)}")
+-> 1429     raise OSError(f"error: cannot cannot submit pipeline, {err_to_str(err)}")
+   1431 if not resp.ok:
+   1432     logger.error(f"bad resp!!\n{resp.text}")
+
+OSError: error: cannot cannot submit pipeline, Invalid leading whitespace, reserved character(s), or returncharacter(s) in header value: "{'model_name': 'credit-classifier', 'dataset':        customer_id  person_age  person_income person_home_ownership  \\\n0                1          22          59000                  RENT   \n1                2          21           9600                   OWN   \n2                3          25           9600              MORTGAGE   \n3                4          23          65500                  RENT   \n4                5          24          54400                  RENT   \n...            ...         ...            ...                   ...   \n32576        32577          57          53000              MORTGAGE   \n32577        32578          54         120000              MORTGAGE   \n32578        32579          65          76000                  RENT   \n32579        32580          56         150000              MORTGAGE   \n32580        32581          66          42000                  RENT   \n\n       person_emp_length      loan_intent loan_grade  loan_amnt  \\\n0                  123.0         PERSONAL          D      35000   \n1                    5.0        EDUCATION          B       1000   \n2                    1.0          MEDICAL          C       5500   \n3                    4.0          MEDICAL          C      35000   \n4                    8.0          MEDICAL          C      35000   \n...                  ...              ...        ...        ...   \n32576                1.0         PERSONAL          C       5800   \n32577                4.0         PERSONAL          A      17625   \n32578                3.0  HOMEIMPROVEMENT          B      35000   \n32579                5.0         PERSONAL          B      15000   \n32580                2.0          MEDICAL          B       6475   \n\n       loan_int_rate  loan_status  loan_percent_income  \\\n0              16.02            1                 0.59   \n1              11.14            0                 0.10   \n2              12.87            1                 0.57   \n3              15.23            1                 0.53   \n4              14.27            1                 0.55   \n...              ...          ...                  ...   \n32576          13.16            0                 0.11   \n32577           7.49            0                 0.15   \n32578          10.99            1                 0.46   \n32579          11.48            0                 0.10   \n32580           9.99            0                 0.15   \n\n      cb_person_default_on_file  cb_person_cred_hist_length  \n0                             Y                           3  \n1                             N                           2  \n2                             N                           3  \n3                             N                           2  \n4                             Y                           4  \n...                         ...                         ...  \n32576                         N                          30  \n32577                         N                          19  \n32578                         N                          28  \n32579                         N                          26  \n32580                         N                          30  \n\n[32581 rows x 13 columns]}", caused by: Invalid leading whitespace, reserved character(s), or returncharacter(s) in header value: "{'model_name': 'credit-classifier', 'dataset':        customer_id  person_age  person_income person_home_ownership  \\\n0                1          22          59000                  RENT   \n1                2          21           9600                   OWN   \n2                3          25           9600              MORTGAGE   \n3                4          23          65500                  RENT   \n4                5          24          54400                  RENT   \n...            ...         ...            ...                   ...   \n32576        32577          57          53000              MORTGAGE   \n32577        32578          54         120000              MORTGAGE   \n32578        32579          65          76000                  RENT   \n32579        32580          56         150000              MORTGAGE   \n32580        32581          66          42000                  RENT   \n\n       person_emp_length      loan_intent loan_grade  loan_amnt  \\\n0                  123.0         PERSONAL          D      35000   \n1                    5.0        EDUCATION          B       1000   \n2                    1.0          MEDICAL          C       5500   \n3                    4.0          MEDICAL          C      35000   \n4                    8.0          MEDICAL          C      35000   \n...                  ...              ...        ...        ...   \n32576                1.0         PERSONAL          C       5800   \n32577                4.0         PERSONAL          A      17625   \n32578                3.0  HOMEIMPROVEMENT          B      35000   \n32579                5.0         PERSONAL          B      15000   \n32580                2.0          MEDICAL          B       6475   \n\n       loan_int_rate  loan_status  loan_percent_income  \\\n0              16.02            1                 0.59   \n1              11.14            0                 0.10   \n2              12.87            1                 0.57   \n3              15.23            1                 0.53   \n4              14.27            1                 0.55   \n...              ...          ...                  ...   \n32576          13.16            0                 0.11   \n32577           7.49            0                 0.15   \n32578          10.99            1                 0.46   \n32579          11.48            0                 0.10   \n32580           9.99            0                 0.15   \n\n      cb_person_default_on_file  cb_person_cred_hist_length  \n0                             Y                           3  \n1                             N                           2  \n2                             N                           3  \n3                             N                           2  \n4                             Y                           4  \n...                         ...                         ...  \n32576                         N                          30  \n32577                         N                          19  \n32578                         N                          28  \n32579                         N                          26  \n32580                         N                          30  \n\n[32581 rows x 13 columns]}"
